@@ -1,4 +1,4 @@
-#include <Keyboard.h> // Keyboard library
+#include <Keyboard.h> // Keyboard library 
 
 #define SW_INPUTS 26 // Switch inputs
 #define HSyncPin 0
