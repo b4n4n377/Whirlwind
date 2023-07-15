@@ -7,16 +7,18 @@
 #define debTime 40      // Debounce time (ms)
 #define samples 100     // Frequency block samples
 #define DEFAULT_FREQ 55 // Default sync freq
+// #define SYNC_MONITOR_ACTIVE // Activates sync check if defined
 
-struct digitalInput {
+struct digitalInput
+{
   const byte pin;
   boolean state;
   unsigned long dbTime;
   const uint8_t btn;
   const uint8_t btn_shift;
-};
+}
 
-digitalInput[SW_INPUTS] = {
+digitalInput inputs[SW_INPUTS] = {
     // Define buttons: {Pin, state, debounce time, button, shift button}
     // Check:
     // https://www.arduino.cc/reference/en/language/functions/usb/keyboard/keyboardmodifiers/
@@ -24,7 +26,7 @@ digitalInput[SW_INPUTS] = {
     {4, HIGH, 0, '5', '5'},                          // P1 COIN
     {5, HIGH, 0, '6', '6'},                          // P2 COIN
     {3, HIGH, 0, KEY_F2, KEY_F2},                    // SERVICE SW
-    {2, HIGH, 0, '9', '9'}                           // TEST SW
+    {2, HIGH, 0, '9', '9'},                          // TEST SW
     {6, HIGH, 0, '1', '1'},                          // P1 START - SHIFT BUTTON
     {7, HIGH, 0, '2', '2'},                          // P2 START
     {8, HIGH, 0, KEY_UP_ARROW, KEY_UP_ARROW},        // P1 UP
@@ -55,8 +57,10 @@ boolean prevEnState = false; // Previous enable state
 int periodSum = 0;           // Sum of periods
 int sCounter = 0;            // Samples counter
 
-void setup() {
-  for (int i = 0; i < SW_INPUTS; i++) {
+void setup()
+{
+  for (int i = 0; i < SW_INPUTS; i++)
+  {
     pinMode(inputs[i].pin, INPUT_PULLUP);         // Set input pin
     inputs[i].state = digitalRead(inputs[i].pin); // Read state
     inputs[i].dbTime = millis();                  // Init debounce time
@@ -74,8 +78,10 @@ void setup() {
   Keyboard.begin(); // Init Keyboard library
 }
 
-void loop() {
-  for (int i = 0; i < SW_INPUTS; i++) {
+void loop()
+{
+  for (int i = 0; i < SW_INPUTS; i++)
+  {
     handleInput(&inputs[i], i == 0);
   }
 #ifdef SYNC_MONITOR_ACTIVE
@@ -83,10 +89,12 @@ void loop() {
 #endif
 }
 
-void handleInput(digitalInput *input, boolean isShift) {
+void handleInput(digitalInput *input, boolean isShift)
+{
   // If time to check state
   if (millis() - input->dbTime > debTime &&
-      digitalRead(input->pin) != input->state) {
+      digitalRead(input->pin) != input->state)
+  {
     input->dbTime = millis();               // Update debounce time
     input->state = digitalRead(input->pin); // Update state
 
@@ -95,30 +103,35 @@ void handleInput(digitalInput *input, boolean isShift) {
         (isShift || inputs[0].state == HIGH) ? input->btn : input->btn_shift;
 
     // If valid key, press/release key depending on state
-    if (btn > 32) {
+    if (btn > 32)
+    {
       input->state == LOW ? Keyboard.press(btn) : Keyboard.release(btn);
       delay(8); // Delay for stable input
     }
 
     // Block/unblock shift depending on state
     startBlock = (isShift && input->state == LOW) ? true : startBlock;
-    if (isShift && input->state == HIGH && startBlock) {
+    if (isShift && input->state == HIGH && startBlock)
+    {
       startBlock = false;
     }
   }
 }
 
-void freqBlock() {
+void freqBlock()
+{
   int periodIst = pulseIn(HSyncPin, HIGH);
   periodSum += periodIst;
   sCounter++;
-  if (sCounter > samples) {
+  if (sCounter > samples)
+  {
     int periodAWG = periodSum / sCounter; // Average period
     periodSum = 0;                        // Reset sum
     sCounter = 0;                         // Reset counter
     enableState = (periodAWG > DEFAULT_FREQ);
     // If state changed
-    if (enableState != prevEnState) {
+    if (enableState != prevEnState)
+    {
       prevEnState = enableState;
       digitalWrite(disablePin, !enableState); // Update disable pin
       digitalWrite(ledPin, enableState);      // Update LED pin
