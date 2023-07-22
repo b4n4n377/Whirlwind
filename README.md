@@ -2,9 +2,12 @@
 
 This is a RP2040 firmware for the open source PC to Arcade Cabinet Interface designed by Barito Nomarchetto.
 
-It is supposed to be an improvement of the initial version https://github.com/baritonomarchetto/Whirlwind/blob/main/whirlwind.ino
+This is supposed to be my improvement of the initial version https://github.com/baritonomarchetto/Whirlwind/blob/main/whirlwind.ino.
 
-The complete project can be found here https://www.instructables.com/Whirlwind-PC-to-JAMMA-Arcade-Cabinet-Interface/
+I tried to orientate on the concepts of the Deamon Bite Arcad Encode
+https://github.com/MickGyver/DaemonBite-Arcade-Encoder/blob/master/DaemonBiteArcadeEncoder/DaemonBiteArcadeEncoder.ino
+
+The complete original project can be found here https://www.instructables.com/Whirlwind-PC-to-JAMMA-Arcade-Cabinet-Interface/
 
 This program reads button states from an arcade controller and simulates keyboard presses accordingly. 
 It also provides optional frequency blocking functionality.
