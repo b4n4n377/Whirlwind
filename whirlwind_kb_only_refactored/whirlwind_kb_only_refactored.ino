@@ -98,7 +98,6 @@ boolean startBlock = false; // Block shift key
  */
 void setup()
 {
-
   // Set all the button pints to inputs with pull-up resistors and set their initial state to HIGH
   for (int i = 0; i < SW_INPUTS; i++)
   {
@@ -130,7 +129,6 @@ void setup()
  */
 void loop()
 {
-
   handleShiftButton(); // Process the shift button separately
   handleButtons();     // Process the rest of the buttons
 #ifdef SYNC_MONITOR_ACTIVE
@@ -147,7 +145,6 @@ void loop()
  */
 void handleButtons()
 {
-
   // Get current time since start
   millisNow = millis();
 
@@ -201,7 +198,6 @@ void handleButtons()
  */
 void handleShiftButton()
 {
-
   // Get current time since start
   millisNow = millis();
 
